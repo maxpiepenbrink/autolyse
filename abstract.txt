@@ -1,0 +1,37 @@
+
+
+main(args):
+ (read command line arguments into an args object of some kind)
+
+ if server option specified:
+   (create TFTP listener "basic file server" object on specified port)
+   (busy poll w/ modest delay, display updates for any activity)
+
+ if client option specified:
+   (get port and target_ip option)
+   (get operation type, default read only?)
+
+   if port and target_ip are good, and operation type is read-only:
+     (get which file we're requesting a read of, make sure it's valid throw if not)
+     (create a TFTP remote file read object with all these parameters): - new tftp.RemoteFileRead(port, target_file)
+       (configure UDP socket with those options)
+       (send the TFTP_RRQ packet with the target_file)
+     (hit .start() on the TFTP read operation object)
+     (busy wait on the remote read operation object, displaying progress in the cli)
+
+   else if operation isn't read only:
+     (error, not implemented)
+
+
+
+Tftp.BasicFileServer:
+  contructor takes: listening port, which local IP to bind to (default 0.0.0.0/ANY)
+
+  start():
+    creates the UDP socket and passes it into a thread to be handled from then on:
+
+  BasicFileServer.WorkerThread:
+     
+
+     run():
+       - busy loops on data from the UDP socket
