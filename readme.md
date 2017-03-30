@@ -1,4 +1,6 @@
-== Overview
+Overview
+=======
+
 This is a minimal somewhat blind implementation of the TFTP RFC outlined here: https://www.ietf.org/rfc/rfc1350.txt
 
 The goal of this project is to provide a minimal library & daemon for sending/receiving data through the constructs outlined in RFC1350.
