@@ -2,7 +2,6 @@ package com.piepenbrink.tftp.protocol;
 
 import com.piepenbrink.tftp.PacketType;
 
-import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.nio.charset.Charset;
 

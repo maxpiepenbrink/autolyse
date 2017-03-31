@@ -23,6 +23,8 @@ What is definitely NOT implemented:
 Usage
 ====
 
+This was put together with JDK 1.8, I haven't tried with any others at this time, I don't recall doing anything 1.8 API specific so it'd probably work on other JVMs just fine.
+
 Client:
 
     bin/java -Djava.util.logging.config.file=logging.properties -Dfile.encoding=UTF-8 com.piepenbrink.Main --client --ip=127.0.0.1 --file=extremely-important-document.mp4 --directory=downloads/
