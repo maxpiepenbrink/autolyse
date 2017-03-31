@@ -60,7 +60,7 @@ public class Acknowledge implements TftpDatagram
 
         // validate that the opcode is the correct opcode before anything
         if (opcode != PacketType.ACK.opCode)
-            throw new RuntimeException( "Attempt to deserialize an Acknowledge (ACK) packet with data that doesn't have a RRQ opcode" );
+            throw new RuntimeException( "Attempt to deserialize an Acknowledge (ACK) packet with data that doesn't have a ACK opcode" );
 
         blockNumber = inputStream.readShort();
 

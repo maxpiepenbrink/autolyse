@@ -110,7 +110,7 @@ public class Data implements TftpDatagram
 
         // validate that the opcode is the correct opcode before anything
         if (opcode != PacketType.DATA.opCode)
-            throw new RuntimeException( "Attempt to deserialize a Data (DATA) packet with data that doesn't have a RRQ opcode" );
+            throw new RuntimeException( "Attempt to deserialize a Data (DATA) packet with data that doesn't have a DATA opcode" );
 
         // read the block #
         blockNumber = inputStream.readShort();
