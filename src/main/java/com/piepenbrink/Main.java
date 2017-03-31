@@ -17,7 +17,7 @@ public class Main
                     + "\nUsage:\n"
                     + "  autolyse --help\n"
                     + "  autolyse --server [--ip=<local ip>] [--port=<local port>] [--directory=<directory to serve files from>]\n"
-                    + "  autolyse --client [--ip=<remote ip>] [--port=<remote port>] \n";
+                    + "  autolyse --client --file=<remote file name> --ip=<remote ip> [--port=<remote port>] [--directory=<directory to write the acquired file to>] \n";
 
     public static void main(String[] args)
     {

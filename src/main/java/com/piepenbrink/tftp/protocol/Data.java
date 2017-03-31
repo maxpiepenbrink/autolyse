@@ -48,6 +48,13 @@ public class Data implements TftpDatagram
         return payload;
     }
 
+    public int getPayloadLength()
+    {
+        if (!isValid())
+            throw new IllegalStateException( "getPayloadLength() called on invalid Data object!" );
+        return payload.length;
+    }
+
     public boolean isFinalPacket()
     {
         if (!isValid())

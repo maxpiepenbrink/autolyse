@@ -60,8 +60,6 @@ public class ReadRequestListenerThread implements Runnable
                 // if we have data then pull the first byte out and get the PacketType of that byte
                 if (incomingData.length > 0)
                 {
-
-
                     // attempt to derive what kind of packet it is
                     PacketType packetType = PacketType.fromOpCode( incomingData[0] );
 

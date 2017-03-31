@@ -2,6 +2,7 @@ package com.piepenbrink.tftp.protocol;
 
 import com.piepenbrink.tftp.PacketType;
 
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.nio.charset.Charset;
 
@@ -14,10 +15,17 @@ import java.nio.charset.Charset;
  * <li>* Each implementation must send it's current self to a remote address</li>
  * <li>* Each implementation must be able to digest a  </li>
  * </ul>
+ * <p>
+ * TODO: this contract isn't very good, an the existing concrete implementations could stand to share some
+ * behavior with a very simple base class to do things like set up stream readers automatically and do more isValid()
+ * checks in places etc. Too late now for the purposes of this exercise and this still works fine, just not a good
+ * long term design if it was anything more complicated than RFC 1350.
  */
 public interface TftpDatagram
 {
-    /** Use this to serialize/deserialize strings */
+    /**
+     * Use this to serialize/deserialize strings
+     */
     String TFTP_CHARSET_STRING = "US-ASCII";
     Charset TFTP_CHARSET = Charset.forName( TFTP_CHARSET_STRING );
 
