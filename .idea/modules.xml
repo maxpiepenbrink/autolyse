@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/autolyse.iml" filepath="$PROJECT_DIR$/.idea/modules/autolyse.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/autolyse_main.iml" filepath="$PROJECT_DIR$/.idea/modules/autolyse_main.iml" group="autolyse" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/autolyse_test.iml" filepath="$PROJECT_DIR$/.idea/modules/autolyse_test.iml" group="autolyse" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/tftp/tftp.iml" filepath="$PROJECT_DIR$/.idea/modules/tftp/tftp.iml" group="tftp" />
+    </modules>
+  </component>
+</project>
