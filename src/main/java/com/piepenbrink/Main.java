@@ -1,5 +1,7 @@
 package com.piepenbrink;
 
+import com.piepenbrink.tftp.BasicUdpTftpServer;
+
 import java.util.logging.Logger;
 
 /**
@@ -10,7 +12,8 @@ public class Main
     private static final Logger logger = Logger.getLogger( "main" );
 
     private static final String usageString =
-            "By default this launches a TFTP file server in the current directory listening on UDP port 69 on 0.0.0.0\n"
+            "By default this launches a TFTP file server in the current directory listening on UDP port "
+                    + BasicUdpTftpServer.DEFAULT_LISTEN_PORT + " (instead of 69, for macOS convenience) on 0.0.0.0\n"
                     + "\nUsage:\n"
                     + "  autolyse --help\n"
                     + "  autolyse --server [--ip=<local ip>] [--port=<local port>] [--directory=<directory to serve files from>]\n"
@@ -19,6 +22,22 @@ public class Main
     public static void main(String[] args)
     {
         Configuration runtimeConfig = Configuration.getConfigurationFrom( args );
+
+        // the main branch for launching the server
+        if (Configuration.Mode.SERVER.equals( runtimeConfig.mode ))
+        {
+            // launch the server with the launch arguments
+            BasicUdpTftpServer server = new BasicUdpTftpServer(
+                    runtimeConfig.targetIp,
+                    runtimeConfig.targetPort,
+                    runtimeConfig.servingDirectory
+            );
+            // will busy wait until the system kills it
+            server.startServer();
+        } else if (Configuration.Mode.CLIENT.equals( runtimeConfig.mode ))
+        {
+
+        }
     }
 
     /**
@@ -29,8 +48,8 @@ public class Main
     private static class Configuration
     {
         public static final Mode DEFAULT_MODE = Mode.SERVER;
-        public static final String DEFAULT_IP = "0.0.0.0";
-        public static final int DEFAULT_LISTEN_PORT = 69;
+        public static final String DEFAULT_IP = BasicUdpTftpServer.DEFAULT_LISTEN_IP;
+        public static final int DEFAULT_LISTEN_PORT = BasicUdpTftpServer.DEFAULT_LISTEN_PORT;
         public static final String DEFAULT_DIR = "./";
 
         public final Mode mode;
