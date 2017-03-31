@@ -10,16 +10,20 @@ public enum PacketType
     DATA( 0x03 ),
     ACK( 0x04 ),
     ERROR( 0x05 ),
-    UNKNOWN( 0xFF );
+    /**
+     * This enum is a special dummy for the application to use to know that no opcode could be resolved.
+     */
+    UNKNOWN( 0xFFFF );
 
-    public final byte opCode;
+    // 2 byte opcode
+    public final int opCode;
 
     PacketType(int opCode)
     {
-        this.opCode = (byte) opCode;
+        this.opCode = opCode;
     }
 
-    public static PacketType fromOpCode(byte opCode)
+    public static PacketType fromOpCode(int opCode)
     {
         //TODO: enums might not be best here but I like maintaining them a lot more in general for this sort of exercise
         if (opCode == RRQ.opCode)

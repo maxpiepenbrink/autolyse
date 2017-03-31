@@ -1,6 +1,8 @@
 package com.piepenbrink.tftp;
 
 
+import com.piepenbrink.tftp.protocol.ReadRequest;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.*;
@@ -58,6 +60,8 @@ public class ReadRequestListenerThread implements Runnable
                 // if we have data then pull the first byte out and get the PacketType of that byte
                 if (incomingData.length > 0)
                 {
+
+
                     // attempt to derive what kind of packet it is
                     PacketType packetType = PacketType.fromOpCode( incomingData[0] );
 
@@ -65,7 +69,8 @@ public class ReadRequestListenerThread implements Runnable
                     if (PacketType.RRQ.equals( packetType ))
                     {
                         logger.info( "Received RRQ message from " + packet.getAddress() );
-                        //TODO: parse and spawn worker thread
+                        ReadRequest readRequest = new ReadRequest();
+                        readRequest.deserialize( incomingData, packet.getLength() );
                     } else if (PacketType.ERROR.equals( packetType ))
                     {
                         logger.warning( "Received ERROR packet from " + packet.getAddress() );
