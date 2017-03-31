@@ -43,6 +43,8 @@ public class Data implements TftpDatagram
 
     public byte[] getPayload()
     {
+        if (!isValid())
+            throw new IllegalStateException( "getPayload() called on invalid Data object!" );
         return payload;
     }
 
@@ -106,16 +108,15 @@ public class Data implements TftpDatagram
         // unpack the first two bytes and make sure we have a good opcode before we do anything
         int opcode = inputStream.readShort();
 
-        // validate that the opcode is the RRQ opcode before anything
+        // validate that the opcode is the correct opcode before anything
         if (opcode != PacketType.DATA.opCode)
-            throw new RuntimeException( "Attempt to deserialize a ReadRequest (RRQ) packet with data that doesn't have a RRQ opcode" );
+            throw new RuntimeException( "Attempt to deserialize a Data (DATA) packet with data that doesn't have a RRQ opcode" );
 
         // read the block #
         blockNumber = inputStream.readShort();
 
-        int bytesAvailable = inputStream.available();
-        payload = new byte[bytesAvailable]; // a nice little shortcut since there's no more data theoretically
         // read the payload
+        payload = new byte[inputStream.available()]; // a nice little shortcut since there's no more data theoretically
         int bytesRead = inputStream.read( payload );
         if (bytesRead > TFTP_MTU)
             throw new IllegalStateException( "Read a TFTP DATA packet that had > 512 bytes of payload data" );

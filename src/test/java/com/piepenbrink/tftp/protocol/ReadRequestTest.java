@@ -24,8 +24,8 @@ public class ReadRequestTest
         ReadRequest incoming = new ReadRequest();
         incoming.deserialize( data, data.length );
 
-        assertEquals( outgoing.targetFile, incoming.targetFile );
-        assertEquals( outgoing.fileMode, incoming.fileMode );
+        assertEquals( outgoing.getTargetFile(), incoming.getTargetFile() );
+        assertEquals( outgoing.getFileMode(), incoming.getFileMode() );
     }
 
 }

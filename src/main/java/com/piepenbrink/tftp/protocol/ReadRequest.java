@@ -20,9 +20,29 @@ import java.io.*;
 public class ReadRequest implements TftpDatagram
 {
     public static final byte TFTP_STRING_TERMINATION = 0x00;
-    String targetFile;
-    String fileMode;
+    private String targetFile;
+    private String fileMode;
     private boolean isValid = false;
+
+    public String getTargetFile()
+    {
+        return targetFile;
+    }
+
+    public void setTargetFile(String targetFile)
+    {
+        this.targetFile = targetFile;
+    }
+
+    public String getFileMode()
+    {
+        return fileMode;
+    }
+
+    public void setFileMode(String fileMode)
+    {
+        this.fileMode = fileMode;
+    }
 
     @Override
     public byte[] serialize() throws RuntimeException, IOException
