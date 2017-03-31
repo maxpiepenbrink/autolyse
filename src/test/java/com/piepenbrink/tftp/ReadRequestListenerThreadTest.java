@@ -15,10 +15,6 @@ public class ReadRequestListenerThreadTest
     @Test
     public void runRequestListenerTestRrqMessage() throws Exception
     {
-        /*Runnable runnable = new ReadRequestListenerThread( "0.0.0.0", 8080, new File( "./" ) );
-        runnable.run();
-
-        // send just the RRQ packet to exercise it
-        DatagramSocket testSocket = new DatagramSocket( 8080, InetAddress.getByName( "127.0.0.1" ) ); */
+        // decided not to do this test since it's pretty involved for this exercise
     }
 }
