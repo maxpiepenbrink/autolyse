@@ -43,16 +43,36 @@ public class ReadRequest implements TftpDatagram
         outputStream.writeByte( TFTP_STRING_TERMINATION );  // terminating 0
 
         // flush and return
-        outputStream.flush();
-        byte[] retval = buffer.toByteArray();
         outputStream.close();
-        return retval;
+        return buffer.toByteArray();
     }
 
     public void setState(String targetFile, String fileMode)
     {
         this.targetFile = targetFile;
         this.fileMode = fileMode;
+    }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ReadRequest that = (ReadRequest) o;
+
+        if (isValid != that.isValid) return false;
+        if (targetFile != null ? !targetFile.equals( that.targetFile ) : that.targetFile != null) return false;
+        return fileMode != null ? fileMode.equals( that.fileMode ) : that.fileMode == null;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        int result = targetFile != null ? targetFile.hashCode() : 0;
+        result = 31 * result + ( fileMode != null ? fileMode.hashCode() : 0 );
+        result = 31 * result + ( isValid ? 1 : 0 );
+        return result;
     }
 
     //TODO: the interface contract here is weak, there's nothing stopping a naive API user from trying to be clever

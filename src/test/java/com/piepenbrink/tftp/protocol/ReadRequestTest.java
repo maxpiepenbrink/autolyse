@@ -16,16 +16,16 @@ public class ReadRequestTest
     @Test
     public void serializeAndDeserialize() throws Exception
     {
-        ReadRequest request = new ReadRequest();
+        ReadRequest outgoing = new ReadRequest();
 
-        request.setState( "a", "octet" );
-        byte[] data = request.serialize();
+        outgoing.setState( "hire-me.txt", "octet" );
+        byte[] data = outgoing.serialize();
 
-        ReadRequest newRequest = new ReadRequest();
-        newRequest.deserialize( data, data.length );
+        ReadRequest incoming = new ReadRequest();
+        incoming.deserialize( data, data.length );
 
-        assertEquals( request.targetFile, newRequest.targetFile );
-        assertEquals( request.fileMode, newRequest.fileMode );
+        assertEquals( outgoing.targetFile, incoming.targetFile );
+        assertEquals( outgoing.fileMode, incoming.fileMode );
     }
 
 }
