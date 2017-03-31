@@ -10,7 +10,7 @@ public class BasicUdpTftpServer
 {
     private static final Logger logger = Logger.getLogger( "UDP TFTP Server" );
     public static final int DEFAULT_LISTEN_PORT = 8080/*69*/; // default should be 69 but MacOS by design makes non-root processes need special permissions
-    public static final String DEFAULT_LISTEN_IP = "0.0.0.0";
+    public static final String DEFAULT_LISTEN_IP = "127.0.0.1";
     Runnable primaryListenerThread = null;
 
     public BasicUdpTftpServer()
