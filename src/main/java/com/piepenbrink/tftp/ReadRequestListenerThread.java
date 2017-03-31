@@ -51,8 +51,12 @@ public class ReadRequestListenerThread implements Runnable
                 byte[] buffer = new byte[MAX_DATAGRAM_BUFFER_PER_THREAD];
                 DatagramPacket packet = new DatagramPacket( buffer, buffer.length );
 
+                logger.info( "Waiting..." );
+
                 // block on this receive, waiting for anything
                 socket.receive( packet );
+
+                logger.info( "Got packet" );
 
                 // we're expecting RRQs only right now so we simply check if it is one
                 byte[] incomingData = packet.getData();
@@ -61,7 +65,7 @@ public class ReadRequestListenerThread implements Runnable
                 if (incomingData.length > 0)
                 {
                     // attempt to derive what kind of packet it is
-                    PacketType packetType = PacketType.fromOpCode( incomingData[0] );
+                    PacketType packetType = PacketType.fromOpCode( ByteUtils.getUnsignedShortFromBuffer( incomingData ) );
 
                     // we got a RRQ packet!
                     if (PacketType.RRQ.equals( packetType ))
@@ -73,11 +77,16 @@ public class ReadRequestListenerThread implements Runnable
                     {
                         logger.warning( "Received ERROR packet from " + packet.getAddress() );
                     }
+                } else
+                {
+                    logger.warning( "Got 0 length packet" );
                 }
 
             } catch (IOException e)
             {
                 // send ERR packet but keep looping
+                logger.warning( "IOException occurred." );
+                e.printStackTrace();
             }
         }
     }

@@ -14,7 +14,7 @@ public class ByteUtilsTest
     {
         int valueTest = 40;
         // least significant byte first in the array
-        byte[] test = new byte[]{(byte) valueTest, (byte) ( valueTest >> 1 )};
+        byte[] test = new byte[]{(byte) ( valueTest >> 1 ), (byte) valueTest};
 
         assertEquals( valueTest, ByteUtils.getUnsignedShortFromBuffer( test ) );
     }

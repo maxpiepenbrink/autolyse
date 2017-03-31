@@ -28,12 +28,20 @@ public class BasicUdpTftpClient
     private int targetPort;
     private File downloadDirectory;
 
+    public BasicUdpTftpClient(String remoteFile, String targetAddress, int targetPort, String downloadDirectory) throws UnknownHostException
+    {
+        this( remoteFile, targetAddress, targetPort, new File( downloadDirectory ) );
+    }
+
     public BasicUdpTftpClient(String remoteFile, String targetAddress, int targetPort, File downloadDirectory) throws UnknownHostException
     {
         this.remoteFile = remoteFile;
         this.targetAddress = InetAddress.getByName( targetAddress );
         this.targetPort = targetPort;
         this.downloadDirectory = downloadDirectory;
+
+        if (!downloadDirectory.exists() && !downloadDirectory.mkdirs())
+            throw new IllegalStateException( "Couldn't create or access download folder!" );
 
         if (!downloadDirectory.isDirectory())
             throw new IllegalStateException( "File directory must be a directory" );
@@ -46,6 +54,7 @@ public class BasicUdpTftpClient
         int nextExpectedBlock = 1;
         try
         {
+            logger.info( "Connecting to " + targetAddress + ":" + targetPort + " to get file: " + remoteFile );
             // get a handle to our output directory
             File outputFile = new File( downloadDirectory, remoteFile );
             FileOutputStream fileWriter = new FileOutputStream( outputFile, false );
@@ -62,6 +71,7 @@ public class BasicUdpTftpClient
                 // serialize the request and send it
                 byte[] data = readRequest.serialize();
                 DatagramPacket requestPacket = new DatagramPacket( data, data.length, targetAddress, targetPort );
+                logger.info( "Sent file request packet to " + requestPacket.getAddress().toString() );
                 socket.send( requestPacket );
             }
 
@@ -125,6 +135,7 @@ public class BasicUdpTftpClient
         } catch (IOException e)
         {
             logger.severe( "Closing prematurely due to IOException." );
+            e.printStackTrace();
             return; // do nothing!
         } finally
         {

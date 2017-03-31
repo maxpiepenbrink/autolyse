@@ -1,8 +1,12 @@
 package com.piepenbrink;
 
+import com.piepenbrink.tftp.BasicUdpTftpClient;
 import com.piepenbrink.tftp.BasicUdpTftpServer;
 
+import java.net.UnknownHostException;
 import java.util.logging.Logger;
+
+import static java.lang.System.exit;
 
 /**
  * entrypoint
@@ -30,13 +34,26 @@ public class Main
             BasicUdpTftpServer server = new BasicUdpTftpServer(
                     runtimeConfig.targetIp,
                     runtimeConfig.targetPort,
-                    runtimeConfig.servingDirectory
+                    runtimeConfig.targetDirectory
             );
             // will busy wait until the system kills it
             server.startServer();
         } else if (Configuration.Mode.CLIENT.equals( runtimeConfig.mode ))
         {
-
+            try
+            {
+                BasicUdpTftpClient client = new BasicUdpTftpClient(
+                        runtimeConfig.targetFile,
+                        runtimeConfig.targetIp,
+                        runtimeConfig.targetPort,
+                        runtimeConfig.targetDirectory
+                );
+                client.start();
+            } catch (UnknownHostException e)
+            {
+                logger.severe( "Networking error occurred while launching client. Aborting." );
+                exit( 1 );
+            }
         }
     }
 
@@ -55,7 +72,7 @@ public class Main
         public final Mode mode;
         public final int targetPort;
         public final String targetIp;
-        public final String servingDirectory;
+        public final String targetDirectory;
         public final String targetFile;
 
         /**
@@ -98,7 +115,7 @@ public class Main
                 } else if (arg.equals( "--h" ) || arg.equals( "--help" ))
                 {
                     logger.info( usageString );
-                    System.exit( 0 );
+                    exit( 0 );
                 }
 
             }
@@ -106,12 +123,12 @@ public class Main
             return new Configuration( mode, targetPort, targetIp, targetDir, targetFile );
         }
 
-        public Configuration(Mode mode, int targetPort, String targetIp, String servingDirectory, String targetFile)
+        public Configuration(Mode mode, int targetPort, String targetIp, String targetDirectory, String targetFile)
         {
             this.mode = mode;
             this.targetPort = targetPort;
             this.targetIp = targetIp;
-            this.servingDirectory = servingDirectory;
+            this.targetDirectory = targetDirectory;
             this.targetFile = targetFile;
         }
 
