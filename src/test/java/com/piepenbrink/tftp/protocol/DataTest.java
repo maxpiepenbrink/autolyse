@@ -28,7 +28,7 @@ public class DataTest
         assertEquals( 512, testPayload.length );
 
         Data outgoing = new Data();
-        outgoing.setPayload( testPayload, 1 );
+        outgoing.setPayload( testPayload, testPayload.length, 1 );
 
         byte[] serializedData = outgoing.serialize();
 
@@ -61,7 +61,7 @@ public class DataTest
         assertEquals( 511, testPayload.length );
 
         Data outgoing = new Data();
-        outgoing.setPayload( testPayload, 1 );
+        outgoing.setPayload( testPayload, testPayload.length, 1 );
 
         byte[] serializedData = outgoing.serialize();
 

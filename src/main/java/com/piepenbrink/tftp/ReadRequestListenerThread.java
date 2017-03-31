@@ -51,12 +51,8 @@ public class ReadRequestListenerThread implements Runnable
                 byte[] buffer = new byte[MAX_DATAGRAM_BUFFER_PER_THREAD];
                 DatagramPacket packet = new DatagramPacket( buffer, buffer.length );
 
-                logger.info( "Waiting..." );
-
                 // block on this receive, waiting for anything
                 socket.receive( packet );
-
-                logger.info( "Got packet" );
 
                 // we're expecting RRQs only right now so we simply check if it is one
                 byte[] incomingData = packet.getData();
@@ -73,6 +69,13 @@ public class ReadRequestListenerThread implements Runnable
                         logger.info( "Received RRQ message from " + packet.getAddress() );
                         ReadRequest readRequest = new ReadRequest();
                         readRequest.deserialize( incomingData, packet.getLength() );
+
+                        if (readRequest.isValid())
+                        {
+                            logger.info( "Starting request handler thread for file " + readRequest.getTargetFile() );
+                            Runnable requestHandler = new OctetFileRequestThread( new File( servingDirectory, readRequest.getTargetFile() ), packet.getAddress(), packet.getPort() );
+                            requestHandler.run();
+                        }
                     } else if (PacketType.ERROR.equals( packetType ))
                     {
                         logger.warning( "Received ERROR packet from " + packet.getAddress() );

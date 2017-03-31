@@ -19,13 +19,14 @@ import java.util.logging.Logger;
 public class BasicUdpTftpClient
 {
     public static final int MAX_DATAGRAM_BUFFER = 1024;
-    public static final int SOCKET_TIMEOUT = 2000; // 2 second timeout
+    public static final int SOCKET_TIMEOUT = 0 /* temporarily wait forever */; // 2 second timeout
 
     private static final Logger logger = Logger.getLogger( "UDP TFTP Client" );
 
     private String remoteFile;
     private InetAddress targetAddress;
     private int targetPort;
+    private boolean hasUpdatedPort = false;
     private File downloadDirectory;
 
     public BasicUdpTftpClient(String remoteFile, String targetAddress, int targetPort, String downloadDirectory) throws UnknownHostException
@@ -121,6 +122,11 @@ public class BasicUdpTftpClient
                         logger.info( "Done receiving data. Quitting client." );
                         break;
                     }
+
+                    // now that we have a fully valid context for this session we can update the port we're
+                    // going to use to finish this communication with the other thread on the server.
+                    if (!hasUpdatedPort)
+                        targetPort = packet.getPort();
 
                     byte[] sendData = createAcknowledgePacket( nextExpectedBlock );
                     socket.send( new DatagramPacket( sendData, sendData.length, targetAddress, targetPort ) );

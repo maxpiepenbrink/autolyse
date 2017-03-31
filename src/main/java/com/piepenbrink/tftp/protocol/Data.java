@@ -23,13 +23,15 @@ public class Data implements TftpDatagram
     private int blockNumber = -1;
 
     private byte[] payload;
+    private int payloadLength;
 
-    public void setPayload(byte[] newPayload, int blockNumber)
+    public void setPayload(byte[] newPayload, int payloadLength, int blockNumber)
     {
-        if (newPayload.length > TFTP_MTU || newPayload.length == 0)
-            throw new IllegalStateException( "Invalid payload size, must be smaller than 512 and greater than 0" );
+        if (payloadLength > TFTP_MTU || payloadLength == 0)
+            throw new IllegalStateException( "Invalid payload size, must be smaller than 512 and greater than 0. Was " + newPayload.length );
 
         payload = newPayload;
+        this.payloadLength = payloadLength;
         this.blockNumber = blockNumber;
 
         // set our valid to true in this case
@@ -91,7 +93,7 @@ public class Data implements TftpDatagram
         // the compiler optimizes basic algebra like this and I think it's expressive and somewhat clear.
         // this is how we calculate the total size the output stream needs to buffer
         int padding = 2 + 2; // +2 for opcode, +2 for block #
-        int totalSize = TFTP_MTU + padding;
+        int totalSize = Math.min( TFTP_MTU, payloadLength ) + padding;
 
         // set up some buffers to make this easier on ourselves
         ByteArrayOutputStream buffer = new ByteArrayOutputStream( totalSize );
@@ -100,7 +102,7 @@ public class Data implements TftpDatagram
         // write our fields to the buffer
         outputStream.writeShort( PacketType.DATA.opCode );  // write the opcode
         outputStream.writeShort( blockNumber );             // write the block #
-        outputStream.write( payload, 0, payload.length );   // write the payload data
+        outputStream.write( payload, 0, payloadLength );   // write the payload data
 
         outputStream.close();
         return buffer.toByteArray();
